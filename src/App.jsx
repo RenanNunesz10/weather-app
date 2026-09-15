@@ -1,9 +1,11 @@
-function App() {
+import WheatherApp from './components/WheatherApp'
+import './components/WheatherApp.css'
 
+const App = () => {
   return (
-    <>
-      Hello world!
-    </>
+    <div>
+      <WheatherApp />
+    </div>
   )
 }
 
