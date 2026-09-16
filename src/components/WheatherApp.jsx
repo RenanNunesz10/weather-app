@@ -96,6 +96,20 @@ const WheatherApp = () => {
         }
     }
 
+    const formatDate = (dateTime) => {
+        if (!dateTime) {
+            return ''
+        }
+
+        const date = new Date(dateTime)
+
+        return new Intl.DateTimeFormat('pt-BR', {
+            weekday: 'short',
+            day: '2-digit',
+            month: 'short'
+        }).format(date)
+    }
+
     const weatherInfo = data
     ? getWeatherInfo(data.weatherCode)
     : null
@@ -138,7 +152,7 @@ const WheatherApp = () => {
         </div>
 
         <div className="weather-date">
-          <p>Sat, 15 Ago</p>
+            <p>{data ? formatDate(data.time) : ''}</p>
         </div>
 
         <div className="weather-data">
