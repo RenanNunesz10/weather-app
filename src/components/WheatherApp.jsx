@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import sunny from '../assets/images/sunny.png'
+import { getWeatherInfo } from '../utils/weatherCode'
 
 const WheatherApp = () => {
     const [location, setLocation] = useState('')
