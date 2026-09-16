@@ -96,13 +96,19 @@ const WheatherApp = () => {
         }
     }
 
+    const weatherInfo = data
+    ? getWeatherInfo(data.weatherCode)
+    : null
+
   return (
     <div className="container">
       <div className="weather-app">
         <div className="search">
           <div className="search-top">
             <i className="fa-solid fa-location-dot"></i>
-            <div className="location">London</div>
+            <div className="location">
+                {data ? data.city : 'Search a city'}
+            </div>
           </div>
 
           <div className="search-bar">
@@ -122,8 +128,13 @@ const WheatherApp = () => {
 
         <div className="weather">
           <img src={sunny} alt="Clear sky" />
-          <div className="weather-type">Clear</div>
-          <div className="temp">28°</div>
+            <div className="weather-type">
+                {weatherInfo ? weatherInfo.description : '--'}
+            </div>
+
+            <div className="temp">
+                {data ? `${Math.round(data.temperature)}°` : '--'}
+            </div>
         </div>
 
         <div className="weather-date">
@@ -134,13 +145,17 @@ const WheatherApp = () => {
           <div className="humidity">
             <div className="data-name">Humidity</div>
             <i className="fa-solid fa-droplet"></i>
-            <div className="data">35%</div>
+            <div className="data">
+                {data ? `${data.humidity}%` : '--'}
+            </div>
           </div>
 
           <div className="wind">
             <div className="data-name">Wind</div>
             <i className="fa-solid fa-wind"></i>
-            <div className="data">3 km/h</div>
+            <div className="data">
+                {data ? `${data.windSpeed} km/h` : '--'}
+            </div>
           </div>
         </div>
       </div>
