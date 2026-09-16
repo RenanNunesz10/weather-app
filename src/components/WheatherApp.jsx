@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import sunny from '../assets/images/sunny.png'
 import { getWeatherInfo } from '../utils/weatherCode'
 import sunny from '../assets/images/sunny.png'
 import cloudy from '../assets/images/cloudy.png'
@@ -12,14 +11,6 @@ const weatherImages = {
   rainy,
   snowy
 }
-
-const weatherInfo = data
-  ? getWeatherInfo(data.weatherCode)
-  : null
-
-const weatherImage = weatherInfo
-  ? weatherImages[weatherInfo.type]
-  : sunny
 
 const WheatherApp = () => {
     const [location, setLocation] = useState('')
@@ -132,6 +123,10 @@ const WheatherApp = () => {
     const weatherInfo = data
     ? getWeatherInfo(data.weatherCode)
     : null
+
+    const weatherImage = weatherInfo
+    ? weatherImages[weatherInfo.type]
+    : sunny
 
   return (
     <div className="container">
