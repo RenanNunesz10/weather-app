@@ -16,6 +16,7 @@ const weatherImages = {
 const WheatherApp = () => {
     // Todos os estados devem ficar dentro do componente
     const [location, setLocation] = useState('')
+    const [error, setError] = useState('')
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(false)
 
@@ -76,40 +77,48 @@ const WheatherApp = () => {
     }
 
     const search = async (city) => {
-        const normalizedCity = city.trim()
+    const normalizedCity = city.trim()
 
-        if (!normalizedCity) {
-            return
+    if (!normalizedCity) {
+        setError('Enter a city name')
+        return
+    }
+
+    try {
+        setLoading(true)
+        setError('')
+
+        const coordinates = await getCoordinates(normalizedCity)
+
+        if (!coordinates) {
+        setError('City not found')
+        setData(null)
+        return
         }
 
-        try {
-            setLoading(true)
+        const currentWeather = await getWeather(
+        coordinates.latitude,
+        coordinates.longitude
+        )
 
-            const coordinates = await getCoordinates(normalizedCity)
+        setData({
+        city: coordinates.name,
+        country: coordinates.country,
+        temperature: currentWeather.temperature_2m,
+        humidity: currentWeather.relative_humidity_2m,
+        windSpeed: currentWeather.wind_speed_10m,
+        weatherCode: currentWeather.weather_code,
+        time: currentWeather.time
+        })
 
-            if (!coordinates) {
-                return
-            }
-
-            const currentWeather = await getWeather(
-                coordinates.latitude,
-                coordinates.longitude
-            )
-
-            setData({
-                city: coordinates.name,
-                country: coordinates.country,
-                temperature: currentWeather.temperature_2m,
-                humidity: currentWeather.relative_humidity_2m,
-                windSpeed: currentWeather.wind_speed_10m,
-                weatherCode: currentWeather.weather_code,
-                time: currentWeather.time
-            })
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setLoading(false)
-        }
+        setLocation('')
+    } catch (err) {
+        console.error(err)
+        setError('Unable to load weather data')
+        setData(null)
+    } finally {
+        setLoading(false)
+    }
     }
 
     const formatDate = (dateTime) => {
@@ -159,6 +168,12 @@ const WheatherApp = () => {
                         ></i>
                     </div>
                 </div>
+
+                {error && (
+                    <div className="not-found">
+                        {error}
+                    </div>
+                )}
 
                 {loading ? (
                     <img className="loader" src={loadingGif} alt="Loading" />
